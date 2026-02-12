@@ -3,72 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LexiQuest - تعلم الإنجليزية للأطفال</title>
+    <title>LexiQuest Kids - تعلم بالصور</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="manifest" href="data:application/manifest+json,{'name':'LexiQuest','short_name':'LexiQuest','start_url':'.','display':'standalone','background_color':'#080808','theme_color':'#080808'}">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #080808; color: #fff; font-family: system-ui; overflow-x: hidden; }
-        .linear-card { background: #111; border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; transition: all 0.3s ease; }
-        .linear-card:hover { border-color: rgba(255,255,255,0.2); transform: translateY(-5px); }
+        body { 
+            background-color: #080808; 
+            color: #fff; 
+            font-family: 'Tajawal', sans-serif; 
+            overflow-x: hidden; 
+        }
+        .linear-card { 
+            background: #111; 
+            border: 1px solid rgba(255,255,255,0.08); 
+            border-radius: 28px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .image-container {
+            width: 100%;
+            height: 200px;
+            border-radius: 20px;
+            overflow: hidden;
+            background: #1a1a1a;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
     <div id="app" class="max-w-md mx-auto min-h-screen p-6 flex flex-col justify-center">
         <div id="screen" class="linear-card p-8 text-center">
             <h1 class="text-3xl font-bold mb-4">LexiQuest 🚀</h1>
-            <p class="text-gray-400 mb-8">جاهز لتعلم كلمات جديدة؟</p>
-            <button onclick="startApp()" class="w-full bg-white text-black py-4 rounded-xl font-bold text-lg active:scale-95 transition">ابدأ الآن</button>
+            <p class="text-gray-400 mb-8">هل أنت مستعد لتعلم كلمات جديدة بالصور؟</p>
+            <button onclick="startApp()" class="w-full bg-white text-black py-4 rounded-xl font-bold text-lg shadow-lg shadow-white/10 active:scale-95 transition">
+                ابدأ رحلة التعلم
+            </button>
         </div>
     </div>
 
     <script>
-        // قاعدة بيانات مبسطة (كمثال سيتم تمديدها لـ 500 كلمة)
-        const words = [
-            { id: 1, word: "Astronaut", definition: "A person who travels to space", icon: "👨‍🚀" },
-            { id: 2, word: "Brave", definition: "Feeling no fear", icon: "🦁" },
-            { id: 3, word: "Kindness", definition: "Being nice to others", icon: "❤️" }
+        // قاعدة بيانات تحتوي على الكلمة، الترجمة، وأيقونة تعبيرية
+        const vocabulary = [
+            { en: "Astronaut", ar: "رائد فضاء", img: "astronaut" },
+            { en: "Butterfly", ar: "فراشة", img: "butterfly" },
+            { en: "Galaxy", ar: "مجرة", img: "galaxy" },
+            { en: "Forest", ar: "غابة", img: "forest" },
+            { en: "Ocean", ar: "محيط", img: "ocean" },
+            { en: "Apple", ar: "تفاحة", img: "apple" },
+            { en: "Lion", ar: "أسد", img: "lion" },
+            { en: "Mountain", ar: "جبل", img: "mountain" }
         ];
 
         let currentIndex = 0;
 
         function startApp() {
-            showWord();
+            showCard();
         }
 
-        function showWord() {
-            const word = words[currentIndex];
+        function showCard() {
+            const item = vocabulary[currentIndex];
             const screen = document.getElementById('screen');
+            
+            // نستخدم خدمة Unsplash لجلب صور حقيقية فوراً بناءً على الكلمة
+            const imageUrl = `https://source.unsplash.com/400x300/?${item.img}`;
+
             screen.innerHTML = `
-                <div class="text-sm text-gray-500 mb-4 uppercase tracking-widest">New Word</div>
-                <h2 class="text-5xl font-bold mb-6">${word.word}</h2>
-                <div id="result" class="hidden">
-                    <div class="text-4xl mb-4">${word.icon}</div>
-                    <p class="text-xl text-gray-300 mb-8">${word.definition}</p>
+                <div class="image-container">
+                    <img src="${imageUrl}" alt="${item.en}" class="w-full h-full object-cover">
                 </div>
-                <button id="revealBtn" onclick="reveal()" class="w-full bg-blue-600 py-3 rounded-xl font-bold">Reveal Meaning</button>
-                <div id="controls" class="hidden grid grid-cols-2 gap-4 mt-4">
-                    <button onclick="next()" class="bg-white/10 py-3 rounded-xl border border-white/10">Hard</button>
-                    <button onclick="next()" class="bg-white/10 py-3 rounded-xl border border-white/10">Easy</button>
+                
+                <div class="mb-2">
+                    <span class="text-blue-400 font-mono text-sm tracking-widest uppercase">Word</span>
+                </div>
+                
+                <h2 class="text-4xl font-bold mb-2 text-white">${item.en}</h2>
+                <h3 class="text-2xl font-medium mb-8 text-gray-400 italic">${item.ar}</h3>
+                
+                <div class="grid grid-cols-1 gap-4">
+                    <button onclick="nextWord()" class="w-full bg-white/5 border border-white/10 py-4 rounded-2xl font-bold hover:bg-white/10 transition flex items-center justify-center gap-2">
+                        الكلمة التالية 
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                          <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="mt-6 flex justify-center gap-1">
+                    ${vocabulary.map((_, i) => `<div class="h-1 w-4 rounded-full ${i === currentIndex ? 'bg-blue-500' : 'bg-white/10'}"></div>`).join('')}
                 </div>
             `;
-            speak(word.word);
+            
+            // نطق الكلمة بالإنجليزية
+            speak(item.en);
         }
 
-        function reveal() {
-            document.getElementById('result').classList.remove('hidden');
-            document.getElementById('revealBtn').classList.add('hidden');
-            document.getElementById('controls').classList.remove('hidden');
-            speak(words[currentIndex].definition);
-        }
-
-        function next() {
-            currentIndex = (currentIndex + 1) % words.length;
-            showWord();
+        function nextWord() {
+            currentIndex = (currentIndex + 1) % vocabulary.length;
+            showCard();
         }
 
         function speak(text) {
+            // إلغاء أي صوت شغال حالياً لمنع التداخل
+            window.speechSynthesis.cancel();
             const msg = new SpeechSynthesisUtterance(text);
             msg.lang = 'en-US';
+            msg.rate = 0.8; // سرعة هادئة لتناسب الأطفال
             window.speechSynthesis.speak(msg);
         }
     </script>
