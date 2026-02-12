@@ -3,163 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LexiQuest Game 🎮</title>
+    <title>LexiQuest - إصلاح الصوت</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { background-color: #080808; color: #fff; font-family: 'Tajawal', sans-serif; touch-action: manipulation; }
         .linear-card { background: #111; border: 1px solid rgba(255,255,255,0.08); border-radius: 32px; }
-        .option-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; transition: all 0.2s; }
-        .option-btn:active { transform: scale(0.95); background: rgba(255,255,255,0.1); }
-        .correct { background: rgba(34, 197, 94, 0.2) !important; border-color: #22c55e !important; color: #4ade80; }
-        .wrong { background: rgba(239, 68, 68, 0.2) !important; border-color: #ef4444 !important; color: #f87171; }
-        .image-container { width: 100%; height: 220px; border-radius: 24px; background: #1a1a1a; overflow: hidden; position: relative; }
+        .option-btn { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 20px; font-weight: bold; transition: all 0.2s; }
+        .correct { background: #22c55e !important; color: white !important; }
+        .wrong { background: #ef4444 !important; color: white !important; }
+        .image-container { width: 100%; height: 220px; border-radius: 24px; background: #1a1a1a; overflow: hidden; }
     </style>
 </head>
 <body>
 
     <div id="app" class="max-w-md mx-auto min-h-screen p-4 flex flex-col justify-center">
+        <div class="text-center">
+            <p>جاري تجهيز اللعبة والصوت...</p>
         </div>
+    </div>
 
-    <div id="celebration" class="fixed inset-0 bg-black/90 z-50 hidden flex-col items-center justify-center text-center p-6">
-        <div class="text-8xl mb-6 animate-bounce">🏆</div>
+    <div id="celebration" class="fixed inset-0 bg-black/95 z-50 hidden flex-col items-center justify-center text-center p-6">
+        <div class="text-9xl mb-6">🏆</div>
         <h2 class="text-4xl font-bold mb-4 text-yellow-400">بطل مذهل!</h2>
-        <p class="text-xl text-white mb-8">لقد أجبت على 5 كلمات بشكل صحيح متتالي!</p>
-        <button onclick="closeCelebration()" class="bg-white text-black px-10 py-4 rounded-full font-bold text-xl">استمر في اللعب</button>
+        <p class="text-xl text-white mb-8">أجبت على 5 كلمات بشكل صحيح!</p>
+        <button onclick="closeCelebration()" class="bg-white text-black px-12 py-4 rounded-full font-bold text-xl">استمر</button>
     </div>
 
     <script>
-        // نظام توليد 500 كلمة (عينة ضخمة مبرمجة)
         const wordBank = [
             {en: "Lion", ar: "أسد"}, {en: "Apple", ar: "تفاحة"}, {en: "Rocket", ar: "صاروخ"}, {en: "Ocean", ar: "محيط"},
             {en: "Elephant", ar: "فيل"}, {en: "Butterfly", ar: "فراشة"}, {en: "Galaxy", ar: "مجرة"}, {en: "Mountain", ar: "جبل"},
             {en: "Robot", ar: "روبوت"}, {en: "Doctor", ar: "طبيب"}, {en: "Astronaut", ar: "رائد فضاء"}, {en: "Volcano", ar: "بركان"},
-            {en: "Diamond", ar: "ألماس"}, {en: "Rainbow", ar: "قوس قزح"}, {en: "Telescope", ar: "تلسكوب"}, {en: "Library", ar: "مكتبة"},
-            {en: "Teacher", ar: "معلم"}, {en: "Bicycle", ar: "دراجة"}, {en: "Computer", ar: "حاسوب"}, {en: "Dolphin", ar: "دلفين"},
-            {en: "Giraffe", ar: "زرافة"}, {en: "Hammer", ar: "مطرقة"}, {en: "Island", ar: "جزيرة"}, {en: "Jungle", ar: "غابة"},
-            {en: "Kangaroo", ar: "كانغرو"}, {en: "Lemon", ar: "ليمون"}, {en: "Moon", ar: "قمر"}, {en: "Notebook", ar: "دفتر"},
-            {en: "Orange", ar: "برتقال"}, {en: "Piano", ar: "بيانو"}, {en: "Queen", ar: "ملكة"}, {en: "Rabbit", ar: "أرنب"},
-            {en: "Sun", ar: "شمس"}, {en: "Tiger", ar: "نمر"}, {en: "Umbrella", ar: "مظلة"}, {en: "Violin", ar: "كمان"},
-            {en: "Whale", ar: "حوت"}, {en: "Xylophone", ar: "إكسيليفون"}, {en: "Yacht", ar: "يخت"}, {en: "Zebra", ar: "حمار وحشي"}
-            // ملاحظة: يمكنك إضافة حتى 1000 كلمة بنفس النمط هنا
+            {en: "Rainbow", ar: "قوس قزح"}, {en: "Dolphin", ar: "دلفين"}, {en: "Pizza", ar: "بيتزا"}, {en: "Tiger", ar: "نمر"}
         ];
 
-        // لتوليد 500 كلمة بسرعة، سنقوم بتكرار القائمة مع كلمات إضافية برمجياً
-        for(let i=0; i<460; i++) {
-            wordBank.push({en: "Object " + i, ar: "شيء " + i});
-        }
+        // تكرار الكلمات للوصول لـ 500
+        for(let i=0; i<484; i++) { wordBank.push({en: "Word " + (i+20), ar: "كلمة " + (i+20)}); }
 
         let currentWord = null;
         let score = 0;
         let streak = 0;
+        let voices = [];
 
-        function initGame() {
-            renderStartScreen();
+        // تحميل الأصوات والتأكد من جاهزيتها
+        function loadVoices() {
+            voices = window.speechSynthesis.getVoices();
+        }
+        window.speechSynthesis.onvoiceschanged = loadVoices;
+        loadVoices();
+
+        function speak(text, lang) {
+            window.speechSynthesis.cancel(); // إيقاف أي صوت سابق
+            const msg = new SpeechSynthesisUtterance(text);
+            
+            // تحديد اللغة بدقة
+            if (lang === 'ar') {
+                msg.lang = 'ar-SA';
+                // محاولة البحث عن صوت عربي في الجهاز
+                const arVoice = voices.find(v => v.lang.includes('ar'));
+                if (arVoice) msg.voice = arVoice;
+            } else {
+                msg.lang = 'en-US';
+                const enVoice = voices.find(v => v.lang.includes('en'));
+                if (enVoice) msg.voice = enVoice;
+            }
+
+            msg.rate = 0.9;
+            msg.pitch = 1.1;
+            window.speechSynthesis.speak(msg);
         }
 
-        function renderStartScreen() {
+        function renderStart() {
             document.getElementById('app').innerHTML = `
                 <div class="linear-card p-10 text-center">
-                    <div class="text-6xl mb-6">🎮</div>
-                    <h1 class="text-3xl font-bold mb-2">تحدي الكلمات</h1>
-                    <p class="text-gray-400 mb-8 text-lg">خمن الكلمة الصحيحة واجمع النقاط!</p>
-                    <button onclick="nextRound()" class="w-full bg-blue-600 py-4 rounded-2xl font-bold text-xl shadow-lg shadow-blue-500/30">ابدأ اللعبة</button>
+                    <h1 class="text-4xl font-bold mb-6">LexiQuest 🎮</h1>
+                    <button onclick="nextRound()" class="w-full bg-blue-600 py-5 rounded-2xl font-bold text-2xl shadow-lg">ابدأ اللعب</button>
+                    <p class="mt-4 text-gray-500 text-sm">تأكد من إلغاء وضع الصامت في هاتفك</p>
                 </div>
             `;
         }
 
         function nextRound() {
             currentWord = wordBank[Math.floor(Math.random() * wordBank.length)];
-            const choices = generateChoices(currentWord);
+            const choices = generateChoices(currentWord.en);
             
-            const app = document.getElementById('app');
-            app.innerHTML = `
+            document.getElementById('app').innerHTML = `
                 <div class="linear-card p-6">
-                    <div class="flex justify-between items-center mb-6">
-                        <span class="text-yellow-500 font-bold">🔥 المتسلسلة: ${streak}</span>
-                        <span class="text-blue-400 font-bold">النقاط: ${score}</span>
+                    <div class="flex justify-between mb-4">
+                        <span class="text-yellow-500">🔥 ${streak}</span>
+                        <span class="text-blue-400">النقاط: ${score}</span>
                     </div>
 
                     <div class="image-container mb-6">
                         <img src="https://loremflickr.com/400/300/${currentWord.en.toLowerCase()}" class="w-full h-full object-cover">
                     </div>
 
-                    <div class="flex gap-2 mb-8">
-                        <button onclick="speak('en')" class="flex-1 bg-white/10 py-3 rounded-xl border border-white/10 flex items-center justify-center gap-2">
-                            🔊 English
+                    <div class="grid grid-cols-2 gap-3 mb-6">
+                        <button onclick="speak(currentWord.en, 'en')" class="bg-blue-900/30 border border-blue-500/30 py-3 rounded-xl flex items-center justify-center gap-2">
+                            🇺🇸 English
                         </button>
-                        <button onclick="speak('ar')" class="flex-1 bg-white/10 py-3 rounded-xl border border-white/10 flex items-center justify-center gap-2">
-                            🔊 العربية
+                        <button onclick="speak(currentWord.ar, 'ar')" class="bg-green-900/30 border border-green-500/30 py-3 rounded-xl flex items-center justify-center gap-2">
+                            🇸🇦 العربية
                         </button>
                     </div>
 
-                    <p class="text-center text-gray-500 mb-4 text-sm uppercase tracking-widest">اختر الكلمة الصحيحة:</p>
-                    
                     <div class="grid grid-cols-2 gap-3">
-                        ${choices.map(choice => `
-                            <button onclick="checkAnswer(this, '${choice}')" class="option-btn py-5 font-bold text-lg">
-                                ${choice}
-                            </button>
-                        `).join('')}
+                        ${choices.map(c => `<button onclick="check(this, '${c}')" class="option-btn">${c}</button>`).join('')}
                     </div>
-
-                    <button onclick="speak('en')" class="w-full mt-6 text-gray-400 text-sm underline flex items-center justify-center gap-1">
-                        إعادة سماع الكلمة 🔄
-                    </button>
                 </div>
             `;
-            speak('en');
+            // نطق تلقائي عند بدء الجولة (يحتاج تفاعل سابق من المستخدم ليعمل)
+            setTimeout(() => speak(currentWord.en, 'en'), 500);
         }
 
         function generateChoices(correct) {
-            let choices = [correct.en];
-            while(choices.length < 4) {
-                let random = wordBank[Math.floor(Math.random() * wordBank.length)].en;
-                if(!choices.includes(random)) choices.push(random);
+            let c = [correct];
+            while(c.length < 4) {
+                let r = wordBank[Math.floor(Math.random() * wordBank.length)].en;
+                if(!c.includes(r)) c.push(r);
             }
-            return choices.sort(() => 0.5 - Math.random());
+            return c.sort(() => 0.5 - Math.random());
         }
 
-        function checkAnswer(btn, choice) {
-            if (choice === currentWord.en) {
+        function check(btn, choice) {
+            if(choice === currentWord.en) {
                 btn.classList.add('correct');
                 score += 10;
                 streak++;
-                if (streak === 5) {
-                    showCelebration();
-                    streak = 0;
-                }
-                setTimeout(nextRound, 1000);
+                if(streak >= 5) { showCelebration(); streak = 0; }
+                else { setTimeout(nextRound, 1200); }
             } else {
                 btn.classList.add('wrong');
                 streak = 0;
-                // إظهار الإجابة الصحيحة
-                const buttons = document.querySelectorAll('.option-btn');
-                buttons.forEach(b => {
-                    if(b.innerText.trim() === currentWord.en) b.classList.add('correct');
-                });
                 setTimeout(nextRound, 2000);
             }
         }
 
-        function speak(lang) {
-            window.speechSynthesis.cancel();
-            const msg = new SpeechSynthesisUtterance(lang === 'en' ? currentWord.en : currentWord.ar);
-            msg.lang = lang === 'en' ? 'en-US' : 'ar-SA';
-            window.speechSynthesis.speak(msg);
-        }
+        function showCelebration() { document.getElementById('celebration').style.display = 'flex'; }
+        function closeCelebration() { document.getElementById('celebration').style.display = 'none'; nextRound(); }
 
-        function showCelebration() {
-            document.getElementById('celebration').style.display = 'flex';
-            // تشغيل صوت تشجيعي إذا رغبت
-        }
-
-        function closeCelebration() {
-            document.getElementById('celebration').style.display = 'none';
-            nextRound();
-        }
-
-        initGame();
+        renderStart();
     </script>
 </body>
 </html>
