@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LexiQuest - تعلم الإنجليزية للأطفال</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="manifest" href="data:application/manifest+json,{'name':'LexiQuest','short_name':'LexiQuest','start_url':'.','display':'standalone','background_color':'#080808','theme_color':'#080808'}">
+    <style>
+        body { background-color: #080808; color: #fff; font-family: system-ui; overflow-x: hidden; }
+        .linear-card { background: #111; border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; transition: all 0.3s ease; }
+        .linear-card:hover { border-color: rgba(255,255,255,0.2); transform: translateY(-5px); }
+    </style>
+</head>
+<body>
+    <div id="app" class="max-w-md mx-auto min-h-screen p-6 flex flex-col justify-center">
+        <div id="screen" class="linear-card p-8 text-center">
+            <h1 class="text-3xl font-bold mb-4">LexiQuest 🚀</h1>
+            <p class="text-gray-400 mb-8">جاهز لتعلم كلمات جديدة؟</p>
+            <button onclick="startApp()" class="w-full bg-white text-black py-4 rounded-xl font-bold text-lg active:scale-95 transition">ابدأ الآن</button>
+        </div>
+    </div>
+
+    <script>
+        // قاعدة بيانات مبسطة (كمثال سيتم تمديدها لـ 500 كلمة)
+        const words = [
+            { id: 1, word: "Astronaut", definition: "A person who travels to space", icon: "👨‍🚀" },
+            { id: 2, word: "Brave", definition: "Feeling no fear", icon: "🦁" },
+            { id: 3, word: "Kindness", definition: "Being nice to others", icon: "❤️" }
+        ];
+
+        let currentIndex = 0;
+
+        function startApp() {
+            showWord();
+        }
+
+        function showWord() {
+            const word = words[currentIndex];
+            const screen = document.getElementById('screen');
+            screen.innerHTML = `
+                <div class="text-sm text-gray-500 mb-4 uppercase tracking-widest">New Word</div>
+                <h2 class="text-5xl font-bold mb-6">${word.word}</h2>
+                <div id="result" class="hidden">
+                    <div class="text-4xl mb-4">${word.icon}</div>
+                    <p class="text-xl text-gray-300 mb-8">${word.definition}</p>
+                </div>
+                <button id="revealBtn" onclick="reveal()" class="w-full bg-blue-600 py-3 rounded-xl font-bold">Reveal Meaning</button>
+                <div id="controls" class="hidden grid grid-cols-2 gap-4 mt-4">
+                    <button onclick="next()" class="bg-white/10 py-3 rounded-xl border border-white/10">Hard</button>
+                    <button onclick="next()" class="bg-white/10 py-3 rounded-xl border border-white/10">Easy</button>
+                </div>
+            `;
+            speak(word.word);
+        }
+
+        function reveal() {
+            document.getElementById('result').classList.remove('hidden');
+            document.getElementById('revealBtn').classList.add('hidden');
+            document.getElementById('controls').classList.remove('hidden');
+            speak(words[currentIndex].definition);
+        }
+
+        function next() {
+            currentIndex = (currentIndex + 1) % words.length;
+            showWord();
+        }
+
+        function speak(text) {
+            const msg = new SpeechSynthesisUtterance(text);
+            msg.lang = 'en-US';
+            window.speechSynthesis.speak(msg);
+        }
+    </script>
+</body>
+</html>
