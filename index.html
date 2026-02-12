@@ -3,110 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LexiQuest Kids - تعلم بالصور</title>
+    <title>LexiQuest - النسخة المحدثة</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { 
-            background-color: #080808; 
-            color: #fff; 
-            font-family: 'Tajawal', sans-serif; 
-            overflow-x: hidden; 
-        }
-        .linear-card { 
-            background: #111; 
-            border: 1px solid rgba(255,255,255,0.08); 
-            border-radius: 28px; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
-        .image-container {
-            width: 100%;
-            height: 200px;
-            border-radius: 20px;
-            overflow: hidden;
-            background: #1a1a1a;
-            margin-bottom: 20px;
-        }
+        body { background-color: #080808; color: #fff; font-family: 'Tajawal', sans-serif; }
+        .linear-card { background: #111; border: 1px solid rgba(255,255,255,0.08); border-radius: 28px; }
+        .image-box { width: 100%; height: 250px; border-radius: 20px; background: #1a1a1a; overflow: hidden; }
+        img { width: 100%; height: 100%; object-cover: cover; }
     </style>
 </head>
 <body>
     <div id="app" class="max-w-md mx-auto min-h-screen p-6 flex flex-col justify-center">
         <div id="screen" class="linear-card p-8 text-center">
             <h1 class="text-3xl font-bold mb-4">LexiQuest 🚀</h1>
-            <p class="text-gray-400 mb-8">هل أنت مستعد لتعلم كلمات جديدة بالصور؟</p>
-            <button onclick="startApp()" class="w-full bg-white text-black py-4 rounded-xl font-bold text-lg shadow-lg shadow-white/10 active:scale-95 transition">
-                ابدأ رحلة التعلم
-            </button>
+            <p class="text-gray-400 mb-8">تم إصلاح الصور وإضافة كلمات جديدة!</p>
+            <button onclick="startApp()" class="w-full bg-white text-black py-4 rounded-xl font-bold">ابدأ التعلم</button>
         </div>
     </div>
 
     <script>
-        // قاعدة بيانات تحتوي على الكلمة، الترجمة، وأيقونة تعبيرية
-        const vocabulary = [
-            { en: "Astronaut", ar: "رائد فضاء", img: "astronaut" },
-            { en: "Butterfly", ar: "فراشة", img: "butterfly" },
-            { en: "Galaxy", ar: "مجرة", img: "galaxy" },
-            { en: "Forest", ar: "غابة", img: "forest" },
-            { en: "Ocean", ar: "محيط", img: "ocean" },
-            { en: "Apple", ar: "تفاحة", img: "apple" },
-            { en: "Lion", ar: "أسد", img: "lion" },
-            { en: "Mountain", ar: "جبل", img: "mountain" }
+        // هنا يمكنك إضافة الـ 500 كلمة. فقط انسخ السطر وغير الكلمات
+        const allWords = [
+            { en: "Astronaut", ar: "رائد فضاء" },
+            { en: "Butterfly", ar: "فراشة" },
+            { en: "Galaxy", ar: "مجرة" },
+            { en: "Forest", ar: "غابة" },
+            { en: "Ocean", ar: "محيط" },
+            { en: "Apple", ar: "تفاحة" },
+            { en: "Lion", ar: "أسد" },
+            { en: "Mountain", ar: "جبل" },
+            { en: "Elephant", ar: "فيل" },
+            { en: "Rocket", ar: "صاروخ" },
+            { en: "Rainbow", ar: "قوس قزح" },
+            { en: "Scientist", ar: "عالم" },
+            { en: "Dolphin", ar: "دلفين" },
+            { en: "Volcano", ar: "بركان" },
+            { en: "Diamond", ar: "ألماس" },
+            { en: "Telescope", ar: "تلسكوب" }
+            // يمكنك إضافة مئات الكلمات هنا بنفس النمط
         ];
 
+        let sessionWords = [];
         let currentIndex = 0;
 
         function startApp() {
+            // اختيار 10 كلمات عشوائية في كل جلسة حتى لا تتكرر بنفس الترتيب
+            sessionWords = [...allWords].sort(() => 0.5 - Math.random()).slice(0, 10);
+            currentIndex = 0;
             showCard();
         }
 
         function showCard() {
-            const item = vocabulary[currentIndex];
+            const item = sessionWords[currentIndex];
             const screen = document.getElementById('screen');
             
-            // نستخدم خدمة Unsplash لجلب صور حقيقية فوراً بناءً على الكلمة
-            const imageUrl = `https://source.unsplash.com/400x300/?${item.img}`;
+            // محرك صور جديد (Pixabay أو عشوائي مستقر)
+            const imageUrl = `https://loremflickr.com/400/300/${item.en.toLowerCase()}`;
 
             screen.innerHTML = `
-                <div class="image-container">
-                    <img src="${imageUrl}" alt="${item.en}" class="w-full h-full object-cover">
+                <div class="image-box mb-6">
+                    <img src="${imageUrl}" alt="${item.en}" onerror="this.src='https://via.placeholder.com/400x300?text=Loading+Image...'">
                 </div>
+                <h2 class="text-4xl font-bold mb-2">${item.en}</h2>
+                <h3 class="text-2xl text-gray-400 mb-8">${item.ar}</h3>
                 
-                <div class="mb-2">
-                    <span class="text-blue-400 font-mono text-sm tracking-widest uppercase">Word</span>
-                </div>
-                
-                <h2 class="text-4xl font-bold mb-2 text-white">${item.en}</h2>
-                <h3 class="text-2xl font-medium mb-8 text-gray-400 italic">${item.ar}</h3>
-                
-                <div class="grid grid-cols-1 gap-4">
-                    <button onclick="nextWord()" class="w-full bg-white/5 border border-white/10 py-4 rounded-2xl font-bold hover:bg-white/10 transition flex items-center justify-center gap-2">
-                        الكلمة التالية 
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                          <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-                        </svg>
-                    </button>
-                </div>
-                
-                <div class="mt-6 flex justify-center gap-1">
-                    ${vocabulary.map((_, i) => `<div class="h-1 w-4 rounded-full ${i === currentIndex ? 'bg-blue-500' : 'bg-white/10'}"></div>`).join('')}
-                </div>
+                <button onclick="nextWord()" class="w-full bg-blue-600 py-4 rounded-2xl font-bold">الكلمة التالية</button>
+                <p class="mt-4 text-xs text-gray-600">كلمة ${currentIndex + 1} من ${sessionWords.length}</p>
             `;
             
-            // نطق الكلمة بالإنجليزية
             speak(item.en);
         }
 
         function nextWord() {
-            currentIndex = (currentIndex + 1) % vocabulary.length;
-            showCard();
+            if (currentIndex < sessionWords.length - 1) {
+                currentIndex++;
+                showCard();
+            } else {
+                document.getElementById('screen').innerHTML = `
+                    <h2 class="text-3xl font-bold mb-4">أحسنت! 🎉</h2>
+                    <p class="mb-8 text-gray-400">لقد أنهيت كلمات اليوم.</p>
+                    <button onclick="startApp()" class="w-full bg-white text-black py-4 rounded-xl font-bold">مرة أخرى بكلمات جديدة</button>
+                `;
+            }
         }
 
         function speak(text) {
-            // إلغاء أي صوت شغال حالياً لمنع التداخل
             window.speechSynthesis.cancel();
             const msg = new SpeechSynthesisUtterance(text);
             msg.lang = 'en-US';
-            msg.rate = 0.8; // سرعة هادئة لتناسب الأطفال
             window.speechSynthesis.speak(msg);
         }
     </script>
